@@ -1,16 +1,50 @@
+
 import "./App.css";
 
+import { useState } from "react";
+
 function App() {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [dateTime, setDateTime] = useState("");
+  function addNewTransaction(ev) {
+    ev.preventDefault();
+    const url = import.meta.env.VITE_API_URL;
+    console.log(url);
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-type": "application.json" },
+      body: JSON.stringify({ name, description, dateTime }),
+    })
+      .then((response) => {response.json()
+      .then((json) => console.log(json));
+      });
+  }
+
   return (
     <main>
       <h1>$400.00</h1>
-      <form>
+      <form onSubmit={addNewTransaction}>
         <div className="basic">
-          <input type="text" placeholder={"+200 new Sumsung TV"} />
-          <input type="datetime-local" />
+          <input
+            type="text"
+            value={name}
+            onChange={(ev) => setName(ev.target.value)}
+            placeholder={"+200 new Sumsung TV"}
+          />
+          <input
+            type="datetime-local"
+            value={dateTime}
+            onChange={(ev) => setDateTime(ev.target.value)}
+          />
         </div>
         <div className="description">
-          <input type="text" placeholder="description" />
+          <input
+            value={description}
+            onChange={(ev) => setDescription(ev.target.value)}
+            type="text"
+            placeholder="description"
+          />
         </div>
         <button type="submit">Add transaction</button>
       </form>
